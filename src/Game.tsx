@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Player, Square } from './gameClasses';
+import { Player, Square } from './constants';
 
 type GameProps = {
   board: Square;

@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Game from './Game';
-import { Player } from './gameClasses';
+import { Player } from './constants';
 
 function App() {
   return (
