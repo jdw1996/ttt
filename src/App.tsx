@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import Game from './Game';
-import { Player, Position, Square, getSquareAtPath, isWinner } from './constants';
+import { GameContext, Player, Position, Square, getSquareAtPath, isWinner } from './constants';
 
 function App() {
   const [nextPlayer, setNextPlayer] = useState<Player.O | Player.X>(Player.O);
   const [board, setBoard] = useState<Square>([
     Player._,
-    Player.X,
-    Player.X,
-    Player.O,
     Player._,
     Player._,
-    Player.O,
-    Player.X,
+    Player._,
+    Player._,
+    Player._,
+    Player._,
+    Player._,
     Player._,
   ]);
 
@@ -51,9 +51,11 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Game path={[]} board={board} />
-    </div>
+    <GameContext.Provider value={{ takeTurn }}>
+      <div className="App">
+        <Game path={[]} board={board} />
+      </div>
+    </GameContext.Provider>
   );
 }
 

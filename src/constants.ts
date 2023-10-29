@@ -1,3 +1,5 @@
+import { createContext } from 'react';
+
 export enum Player {
   O,
   X,
@@ -39,3 +41,9 @@ export const isWinner = (player: Player, square: Square): boolean => {
   }
   return false;
 };
+
+type GameContextType = {
+  takeTurn: (path: Position[]) => void;
+};
+
+export const GameContext = createContext<GameContextType>({ takeTurn: () => {} });
