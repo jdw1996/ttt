@@ -18,6 +18,28 @@ const LINES = [
 
 export type Square = Player | [Square, Square, Square, Square, Square, Square, Square, Square, Square];
 
+export const getSquareAtPath = (square: Square, path: Position[]): Square =>
+  path.reduce((latestBoard, nextPosition) => {
+    if (!Array.isArray(latestBoard)) {
+      throw new Error('Path is too long!');
+    }
+    return latestBoard[nextPosition];
+  }, square);
+
+export const isWinner = (player: Player, square: Square): boolean => {
+  if (!Array.isArray(square)) {
+    return square === player;
+  }
+
+  for (const line of LINES) {
+    const lineValues = Array.from(line, (position) => square[position]);
+    if (lineValues.every((val) => val === player)) {
+      return true;
+    }
+  }
+  return false;
+};
+
 // export class Board {
 //   winner: Player | null;
 //   depth: number;
