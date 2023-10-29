@@ -6,7 +6,10 @@ import { Player } from './constants';
 function App() {
   return (
     <div className="App">
-      <Game board={[Player.X, Player.O, Player.X, Player.O, Player.X, Player.X, Player.X, Player.X, Player.O]} />
+      <Game
+        path={[]}
+        board={[Player._, Player.X, Player.X, Player.O, Player._, Player._, Player.O, Player.X, Player._]}
+      />
     </div>
   );
 }

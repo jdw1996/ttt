@@ -3,6 +3,7 @@ export enum Player {
   X,
   _,
 }
+export type Position = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 const LINES = [
   [0, 1, 2],

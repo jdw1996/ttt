@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Player, Square } from './constants';
+import { Player, Position, Square } from './constants';
+import './Game.css';
 
 type GameProps = {
   board: Square;
+  path: Position[];
 };
 
-function Game({ board }: GameProps) {
+function Game({ board, path }: GameProps) {
   const [winner, setWinner] = useState<Player>(Player._);
 
   useEffect(() => {
@@ -14,47 +16,35 @@ function Game({ board }: GameProps) {
     }
   }, [board]);
 
+  const positionToTD = (position: Position) => {
+    if (!Array.isArray(board)) {
+      return null;
+    }
+
+    return (
+      <td>
+        <Game path={[...path, position]} board={board[position]} />
+      </td>
+    );
+  };
+
   if (Array.isArray(board)) {
     return (
-      <table>
-        <tr>
-          <td>
-            <Game board={board[0]} />
-          </td>
-          <td>
-            <Game board={board[1]} />
-          </td>
-          <td>
-            <Game board={board[2]} />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Game board={board[3]} />
-          </td>
-          <td>
-            <Game board={board[4]} />
-          </td>
-          <td>
-            <Game board={board[5]} />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Game board={board[6]} />
-          </td>
-          <td>
-            <Game board={board[7]} />
-          </td>
-          <td>
-            <Game board={board[8]} />
-          </td>
-        </tr>
-      </table>
+      <div>
+        <table>
+          <tr>{([0, 1, 2] as Position[]).map(positionToTD)}</tr>
+          <tr>{([3, 4, 5] as Position[]).map(positionToTD)}</tr>
+          <tr>{([6, 7, 8] as Position[]).map(positionToTD)}</tr>
+        </table>
+      </div>
     );
   }
 
-  return <div>{winner === Player.X ? 'X' : winner === Player.O ? 'O' : ' '}</div>;
+  return (
+    <div className={winner === Player._ ? 'blank' : ''}>
+      {winner === Player.X ? 'X' : winner === Player.O ? 'O' : '.'}
+    </div>
+  );
 }
 
 export default Game;
