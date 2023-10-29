@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Game from './Game';
 import { GameContext, Player, Position, Square, getSquareAtPath, isWinner } from './constants';

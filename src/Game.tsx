@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { GameContext, Player, Position, Square } from './constants';
+import React, { useContext, useEffect, useState } from 'react';
+import { GameContext, Player, Position, Square, noop } from './constants';
 import './Game.css';
 
 type GameProps = {
@@ -42,7 +42,7 @@ function Game({ board, path }: GameProps) {
   }
 
   return (
-    <div className={winner === Player._ ? 'blank' : ''} onClick={() => takeTurn(path)}>
+    <div className={winner === Player._ ? 'blank' : ''} onClick={() => (winner === Player._ ? takeTurn(path) : noop)}>
       {winner === Player.X ? 'X' : winner === Player.O ? 'O' : '.'}
     </div>
   );

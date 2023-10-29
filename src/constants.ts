@@ -1,5 +1,8 @@
 import { createContext } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const noop = () => {};
+
 export enum Player {
   O,
   X,
@@ -46,4 +49,4 @@ type GameContextType = {
   takeTurn: (path: Position[]) => void;
 };
 
-export const GameContext = createContext<GameContextType>({ takeTurn: () => {} });
+export const GameContext = createContext<GameContextType>({ takeTurn: noop });
