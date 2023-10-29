@@ -1,20 +1,111 @@
 import React, { useState } from 'react';
 import './App.css';
 import Game from './Game';
-import { GameContext, Player, Position, Square, getSquareAtPath, isWinner } from './constants';
+import { GameContext, Player, Position, Square, getSquareAtPath, checkIsWinner } from './constants';
 
 function App() {
   const [nextPlayer, setNextPlayer] = useState<Player.O | Player.X>(Player.O);
+  const [activePath, setActivePath] = useState<Position[]>([]);
   const [board, setBoard] = useState<Square>([
-    Player._,
-    Player._,
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    Player._,
-    Player._,
-    Player._,
-    Player._,
-    Player._,
-    Player._,
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
+    [
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+      [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
+    ],
   ]);
 
   const nextTurn = () => {
@@ -34,7 +125,7 @@ function App() {
         throw new Error('Path is too long!');
       }
       parent[path[path.length - 1]] = nextPlayer;
-      if (isWinner(nextPlayer, parent)) {
+      if (checkIsWinner(nextPlayer, parent)) {
         if (path.length <= 1) {
           return nextPlayer;
         }
@@ -44,6 +135,10 @@ function App() {
         }
         grandparent[path[path.length - 2]] = nextPlayer;
       }
+
+      const prospectiveActivePath = path.slice(1);
+      setActivePath(Array.isArray(getSquareAtPath(board, prospectiveActivePath)) ? prospectiveActivePath : []);
+
       return newBoard;
     });
 
@@ -51,7 +146,7 @@ function App() {
   };
 
   return (
-    <GameContext.Provider value={{ takeTurn }}>
+    <GameContext.Provider value={{ takeTurn, activePath }}>
       <div className="App">
         <Game path={[]} board={board} />
       </div>

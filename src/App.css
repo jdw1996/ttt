@@ -1,8 +1,5 @@
-html * {
-  font-size: 2rem;
-}
-
 .App {
-  height: 600px;
-  width: 600px;
+  margin: 24px auto;
+  height: 1500px;
+  width: 1500px;
 }

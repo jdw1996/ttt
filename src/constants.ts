@@ -23,15 +23,20 @@ const LINES = [
 
 export type Square = Player | [Square, Square, Square, Square, Square, Square, Square, Square, Square];
 
-export const getSquareAtPath = (square: Square, path: Position[]): Square =>
-  path.reduce((latestBoard, nextPosition) => {
-    if (!Array.isArray(latestBoard)) {
-      throw new Error('Path is too long!');
-    }
-    return latestBoard[nextPosition];
-  }, square);
+export const getSquareAtPath = (square: Square, path: Position[]): Square | null => {
+  try {
+    return path.reduce((latestBoard, nextPosition) => {
+      if (!Array.isArray(latestBoard)) {
+        throw new Error('Path is too long!');
+      }
+      return latestBoard[nextPosition];
+    }, square);
+  } catch {
+    return null;
+  }
+};
 
-export const isWinner = (player: Player, square: Square): boolean => {
+export const checkIsWinner = (player: Player, square: Square): boolean => {
   if (!Array.isArray(square)) {
     return square === player;
   }
@@ -45,8 +50,21 @@ export const isWinner = (player: Player, square: Square): boolean => {
   return false;
 };
 
-type GameContextType = {
-  takeTurn: (path: Position[]) => void;
+export const checkIsPrefix = (prefix: Position[], path: Position[]): boolean => {
+  if (prefix.length > path.length) {
+    return false;
+  }
+  for (let i = 0; i < prefix.length; ++i) {
+    if (prefix[i] !== path[i]) {
+      return false;
+    }
+  }
+  return true;
 };
 
-export const GameContext = createContext<GameContextType>({ takeTurn: noop });
+type GameContextType = {
+  takeTurn: (path: Position[]) => void;
+  activePath: Position[];
+};
+
+export const GameContext = createContext<GameContextType>({ takeTurn: noop, activePath: [] });
