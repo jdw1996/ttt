@@ -8,7 +8,7 @@ function App() {
   const [board, setBoard] = useState<Square>([
     Player._,
     Player._,
-    Player._,
+    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
     Player._,
     Player._,
     Player._,

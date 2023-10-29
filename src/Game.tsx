@@ -17,32 +17,29 @@ function Game({ board, path }: GameProps) {
     }
   }, [board]);
 
-  const positionToTD = (position: Position) => {
+  const positionToSquare = (position: Position) => {
     if (!Array.isArray(board)) {
       return null;
     }
 
-    return (
-      <td>
-        <Game path={[...path, position]} board={board[position]} />
-      </td>
-    );
+    return <Game path={[...path, position]} board={board[position]} />;
   };
 
   if (Array.isArray(board)) {
     return (
-      <div>
-        <table>
-          <tr>{([0, 1, 2] as Position[]).map(positionToTD)}</tr>
-          <tr>{([3, 4, 5] as Position[]).map(positionToTD)}</tr>
-          <tr>{([6, 7, 8] as Position[]).map(positionToTD)}</tr>
-        </table>
+      <div className={`board sector ${path.length === 0 ? 'topSector' : ''}`}>
+        {Array.from({ length: 9 }, (_, i) => positionToSquare(i as Position))}
       </div>
     );
   }
 
   return (
-    <div className={winner === Player._ ? 'blank' : ''} onClick={() => (winner === Player._ ? takeTurn(path) : noop)}>
+    <div
+      className={`square sector ${path.length === 0 ? 'topSector' : ''} ${winner === Player._ ? 'blank' : ''} s${
+        path[path.length - 1]
+      }`}
+      onClick={() => (winner === Player._ ? takeTurn(path) : noop)}
+    >
       {winner === Player.X ? 'X' : winner === Player.O ? 'O' : '.'}
     </div>
   );
