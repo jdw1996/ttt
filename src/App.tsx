@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import './App.css';
 import Game from './Game';
-import { GameContext, Player, Position, Square, getSquareAtPath, checkIsWinner } from './constants';
+import {
+  GameContext,
+  Player,
+  Position,
+  Square,
+  getSquareAtPath,
+  checkIsWinner,
+  generateBlankSquare,
+} from './constants';
 
 const takeTurnHelper = (player: Player, square: Square, pathAcc: Position[]): Square => {
   if (pathAcc.length === 0 || !Array.isArray(square)) {
@@ -19,17 +27,7 @@ const takeTurnHelper = (player: Player, square: Square, pathAcc: Position[]): Sq
 function App() {
   const [nextPlayer, setNextPlayer] = useState<Player.O | Player.X>(Player.O);
   const [activePath, setActivePath] = useState<Position[]>([]);
-  const [board, setBoard] = useState<Square>([
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-    [Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._, Player._],
-  ]);
+  const [board, setBoard] = useState<Square>(generateBlankSquare(3, true, true));
 
   const nextTurn = () => {
     // Toggle the next player.

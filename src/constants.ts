@@ -68,3 +68,16 @@ type GameContextType = {
 };
 
 export const GameContext = createContext<GameContextType>({ takeTurn: noop, activePath: [] });
+
+const flipACoin = (): boolean => {
+  const rand = Math.random();
+  return rand >= 0.5;
+};
+
+export const generateBlankSquare = (depth: number, isRandom = false, isTopLevel = false): Square => {
+  if (depth === 0 || (!isTopLevel && isRandom && flipACoin())) {
+    return Player._;
+  }
+
+  return Array.from({ length: 9 }, () => generateBlankSquare(depth - 1, isRandom)) as Square;
+};
