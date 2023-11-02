@@ -3,6 +3,19 @@ import './App.css';
 import Game from './Game';
 import { GameContext, Player, Position, Square, getSquareAtPath, checkIsWinner } from './constants';
 
+const takeTurnHelper = (player: Player, square: Square, pathAcc: Position[]): Square => {
+  if (pathAcc.length === 0 || !Array.isArray(square)) {
+    return player;
+  }
+
+  square[pathAcc[0]] = takeTurnHelper(player, square[pathAcc[0]], pathAcc.slice(1));
+
+  if (checkIsWinner(player, square)) {
+    return player;
+  }
+  return square;
+};
+
 function App() {
   const [nextPlayer, setNextPlayer] = useState<Player.O | Player.X>(Player.O);
   const [activePath, setActivePath] = useState<Position[]>([]);
@@ -29,25 +42,18 @@ function App() {
     }
 
     setBoard((oldBoard) => {
-      const newBoard = structuredClone(oldBoard);
-      const parent = getSquareAtPath(newBoard, path.slice(0, -1));
-      if (!Array.isArray(parent)) {
-        throw new Error('Path is too long!');
-      }
-      parent[path[path.length - 1]] = nextPlayer;
-      if (checkIsWinner(nextPlayer, parent)) {
-        if (path.length <= 1) {
-          return nextPlayer;
-        }
-        const grandparent = getSquareAtPath(newBoard, path.slice(0, -2));
-        if (!Array.isArray(grandparent)) {
-          throw new Error('Path is too long!');
-        }
-        grandparent[path[path.length - 2]] = nextPlayer;
-      }
+      const newBoard = takeTurnHelper(nextPlayer, structuredClone(oldBoard), path);
 
-      const prospectiveActivePath = path.slice(1);
-      setActivePath(Array.isArray(getSquareAtPath(board, prospectiveActivePath)) ? prospectiveActivePath : []);
+      let prospectiveActivePath = path.slice(1);
+      while (!Array.isArray(getSquareAtPath(newBoard, prospectiveActivePath)) && prospectiveActivePath.length > 0) {
+        prospectiveActivePath = prospectiveActivePath.slice(0, -1);
+      }
+      // I am calling a setter within another setter here, which might not be
+      // the best pattern to follow. In theory I could do this in an effect
+      // that fires after board is changed, but then I wouldn't have access to
+      // the path. Maybe there's a cleaner solution, but this is the best I've
+      // got at the moment.
+      setActivePath(prospectiveActivePath);
 
       return newBoard;
     });
