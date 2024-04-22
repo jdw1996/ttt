@@ -70,8 +70,7 @@ type GameContextType = {
 export const GameContext = createContext<GameContextType>({ takeTurn: noop, activePath: [] });
 
 const flipACoin = (): boolean => {
-  const rand = Math.random();
-  return rand >= 0.5;
+  return Math.random() >= 0.5;
 };
 
 export const generateBlankSquare = (depth: number, isRandom = false, isTopLevel = false): Square => {

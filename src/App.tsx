@@ -10,6 +10,7 @@ import {
   checkIsWinner,
   generateBlankSquare,
 } from './constants';
+import Menu from './Menu';
 
 const takeTurnHelper = (player: Player, square: Square, pathAcc: Position[]): Square => {
   if (pathAcc.length === 0 || !Array.isArray(square)) {
@@ -27,7 +28,7 @@ const takeTurnHelper = (player: Player, square: Square, pathAcc: Position[]): Sq
 function App() {
   const [nextPlayer, setNextPlayer] = useState<Player.O | Player.X>(Player.O);
   const [activePath, setActivePath] = useState<Position[]>([]);
-  const [board, setBoard] = useState<Square>(generateBlankSquare(3, true, true));
+  const [board, setBoard] = useState<Square>(Player._);
 
   const nextTurn = () => {
     // Toggle the next player.
@@ -62,6 +63,19 @@ function App() {
   return (
     <GameContext.Provider value={{ takeTurn, activePath }}>
       <div className="App">
+        <Menu
+          createNewBoard={(depth, isRandom, isTopLevel) => {
+            setNextPlayer(Player.O);
+            setActivePath([]);
+            setBoard(generateBlankSquare(depth, isRandom, isTopLevel));
+          }}
+          isGameOver={board === Player.O || board === Player.X}
+          resetBoard={() => {
+            setNextPlayer(Player.O);
+            setActivePath([]);
+            setBoard(Player._);
+          }}
+        />
         <Game path={[]} board={board} />
       </div>
     </GameContext.Provider>
