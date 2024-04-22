@@ -46,10 +46,10 @@ function Game({ board, path }: GameProps) {
       {isMultiSquare
         ? Array.from({ length: 9 }, (_, i) => positionToSquare(i as Position))
         : winner === Player.X
-        ? 'X'
-        : winner === Player.O
-        ? 'O'
-        : '.'}
+          ? 'X'
+          : winner === Player.O
+            ? 'O'
+            : '.'}
     </div>
   );
 }
