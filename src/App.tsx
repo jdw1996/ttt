@@ -73,6 +73,7 @@ function App() {
             setActivePath([]);
             setBoard(generateBlankSquare(depth, isRandom, isTopLevel));
           }}
+          gameWinner={board === Player.X || board === Player.O ? board : null}
           isGameInProgress={board !== null}
           nextPlayer={nextPlayer}
           resetBoard={() => {

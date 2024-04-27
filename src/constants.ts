@@ -80,3 +80,5 @@ export const generateBlankSquare = (depth: number, isRandom = false, isTopLevel 
 
   return Array.from({ length: 9 }, () => generateBlankSquare(depth - 1, isRandom)) as Square;
 };
+
+export const getDisplayVersion = (player: Player) => (player === Player.X ? '❌' : player === Player.O ? '⭕' : '.');

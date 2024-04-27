@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { GameContext, Player, Position, Square, checkIsPrefix, noop } from './constants';
+import { GameContext, Player, Position, Square, checkIsPrefix, getDisplayVersion, noop } from './constants';
 import './Game.css';
 
 type GameProps = {
@@ -43,13 +43,7 @@ function Game({ board, path }: GameProps) {
       } ${isClickable ? 'clickable' : ''} s${path[path.length - 1]} d${path.length} ${isActiveBoard ? 'activeBoard' : ''}`}
       onClick={isClickable ? () => takeTurn(path) : noop}
     >
-      {isMultiSquare
-        ? Array.from({ length: 9 }, (_, i) => positionToSquare(i as Position))
-        : winner === Player.X
-          ? 'X'
-          : winner === Player.O
-            ? 'O'
-            : '.'}
+      {isMultiSquare ? Array.from({ length: 9 }, (_, i) => positionToSquare(i as Position)) : getDisplayVersion(winner)}
     </div>
   );
 }
