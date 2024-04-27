@@ -27,7 +27,7 @@ function Game({ board, path }: GameProps) {
       return null;
     }
 
-    return <Game path={[...path, position]} board={board[position]} />;
+    return <Game key={position} path={[...path, position]} board={board[position]} />;
   };
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function Game({ board, path }: GameProps) {
     <div
       className={`sector ${isMultiSquare ? 'board' : 'square'} ${path.length === 0 ? 'topSector' : ''} ${
         !isMultiSquare && winner === Player._ ? 'blank' : ''
-      } ${isClickable ? 'clickable' : ''} s${path[path.length - 1]} ${isActiveBoard ? 'activeBoard' : ''}`}
+      } ${isClickable ? 'clickable' : ''} s${path[path.length - 1]} d${path.length} ${isActiveBoard ? 'activeBoard' : ''}`}
       onClick={isClickable ? () => takeTurn(path) : noop}
     >
       {isMultiSquare

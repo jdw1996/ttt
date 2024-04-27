@@ -6,9 +6,9 @@
     's6 s7 s8';
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
+  height: 100%;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  padding: 24px;
+  padding: 10px;
   border: 1px solid black;
 }
 
@@ -25,8 +25,8 @@
 
 .square {
   border: 1px solid black;
+  height: 100%;
   width: 100%;
-  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,4 +81,17 @@
 }
 .s8 {
   grid-area: 's8';
+}
+
+.d0 {
+  font-size: 27rem;
+}
+.d1 {
+  font-size: 9rem;
+}
+.d2 {
+  font-size: 3rem;
+}
+.d3 {
+  font-size: 1rem;
 }

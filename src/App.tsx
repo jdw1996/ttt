@@ -81,7 +81,11 @@ function App() {
             setBoard(null);
           }}
         />
-        {board && <Game path={[]} board={board} />}
+        {board !== null && (
+          <div className="game-wrapper">
+            <Game path={[]} board={board} />
+          </div>
+        )}
       </div>
     </GameContext.Provider>
   );
