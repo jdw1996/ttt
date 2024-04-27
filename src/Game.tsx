@@ -21,12 +21,6 @@ function Game({ board, path }: GameProps) {
     [activePath, path],
   );
 
-  useEffect(() => {
-    if (board === Player.X || board === Player.O) {
-      setWinner(board);
-    }
-  }, [board]);
-
   const positionToSquare = (position: Position) => {
     // Typescript isn't smart enough to let me use isMultiSquare here.
     if (!Array.isArray(board)) {
@@ -35,6 +29,12 @@ function Game({ board, path }: GameProps) {
 
     return <Game path={[...path, position]} board={board[position]} />;
   };
+
+  useEffect(() => {
+    if (board === Player.X || board === Player.O) {
+      setWinner(board);
+    }
+  }, [board]);
 
   return (
     <div

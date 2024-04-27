@@ -28,7 +28,7 @@ const takeTurnHelper = (player: Player, square: Square, pathAcc: Position[]): Sq
 function App() {
   const [nextPlayer, setNextPlayer] = useState<Player.O | Player.X>(Player.O);
   const [activePath, setActivePath] = useState<Position[]>([]);
-  const [board, setBoard] = useState<Square>(Player._);
+  const [board, setBoard] = useState<Square | null>(null);
 
   const nextTurn = () => {
     // Toggle the next player.
@@ -41,6 +41,10 @@ function App() {
     }
 
     setBoard((oldBoard) => {
+      if (oldBoard === null) {
+        return null;
+      }
+
       const newBoard = takeTurnHelper(nextPlayer, structuredClone(oldBoard), path);
 
       let prospectiveActivePath = path.slice(1);
@@ -69,14 +73,15 @@ function App() {
             setActivePath([]);
             setBoard(generateBlankSquare(depth, isRandom, isTopLevel));
           }}
-          isGameOver={board === Player.O || board === Player.X}
+          isGameInProgress={board !== null}
+          nextPlayer={nextPlayer}
           resetBoard={() => {
             setNextPlayer(Player.O);
             setActivePath([]);
-            setBoard(Player._);
+            setBoard(null);
           }}
         />
-        <Game path={[]} board={board} />
+        {board && <Game path={[]} board={board} />}
       </div>
     </GameContext.Provider>
   );

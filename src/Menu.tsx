@@ -1,83 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import './Menu.css';
+import { Player } from './constants';
 
 type MenuProps = {
   createNewBoard: (depth: number, isRandom: boolean, isTopLevel: boolean) => void;
-  isGameOver: boolean;
+  isGameInProgress: boolean;
+  nextPlayer: Player;
   resetBoard: () => void;
 };
 
-function Menu({ createNewBoard, isGameOver, resetBoard }: MenuProps) {
-  const [isSelectionMade, setIsSelectionMade] = useState(false);
-
-  useEffect(() => {
-    if (isGameOver) {
-      setIsSelectionMade(false);
-    }
-  }, [isGameOver]);
-
-  return (
-    <div className="menu-wrapper">
-      <h2>How ultimate do you like your tic-tac-toe?</h2>
-      <div className="options">
-        <button
-          disabled={isSelectionMade}
-          onClick={() => {
-            createNewBoard(1, false, true);
-            setIsSelectionMade(true);
-          }}
-        >
-          Not ultimate
+const Menu = ({ createNewBoard, isGameInProgress, nextPlayer, resetBoard }: MenuProps) => (
+  <div className="menu-wrapper">
+    {!isGameInProgress && (
+      <>
+        <h2>How ultimate do you like your tic-tac-toe?</h2>
+        <div className="options">
+          <button
+            onClick={() => {
+              createNewBoard(1, false, true);
+            }}
+          >
+            Not ultimate
+          </button>
+          <button
+            onClick={() => {
+              createNewBoard(2, false, true);
+            }}
+          >
+            Ultimate
+          </button>
+          <button
+            onClick={() => {
+              createNewBoard(3, false, true);
+            }}
+          >
+            Ultimate Ultimate
+          </button>
+          <button
+            onClick={() => {
+              const rand = Math.random();
+              createNewBoard(rand < 1 / 3 ? 1 : rand > 2 / 3 ? 3 : 2, false, true);
+            }}
+          >
+            Surprise me
+          </button>
+          <button
+            onClick={() => {
+              createNewBoard(3, true, true);
+            }}
+          >
+            Confuse me
+          </button>
+        </div>
+      </>
+    )}
+    {isGameInProgress && (
+      <>
+        <button disabled={!isGameInProgress} onClick={resetBoard}>
+          Restart game
         </button>
-        <button
-          disabled={isSelectionMade}
-          onClick={() => {
-            createNewBoard(2, false, true);
-            setIsSelectionMade(true);
-          }}
-        >
-          Ultimate
-        </button>
-        <button
-          disabled={isSelectionMade}
-          onClick={() => {
-            createNewBoard(3, false, true);
-            setIsSelectionMade(true);
-          }}
-        >
-          Ultimate Ultimate
-        </button>
-        <button
-          disabled={isSelectionMade}
-          onClick={() => {
-            const rand = Math.random();
-            createNewBoard(rand < 1 / 3 ? 1 : rand > 2 / 3 ? 3 : 2, false, true);
-            setIsSelectionMade(true);
-          }}
-        >
-          Surprise me
-        </button>
-        <button
-          disabled={isSelectionMade}
-          onClick={() => {
-            createNewBoard(3, true, true);
-            setIsSelectionMade(true);
-          }}
-        >
-          Confuse me
-        </button>
-        <button
-          disabled={!isSelectionMade}
-          onClick={() => {
-            resetBoard();
-            setIsSelectionMade(false);
-          }}
-        >
-          Reset
-        </button>
-      </div>
-    </div>
-  );
-}
+        <div>Next player is {nextPlayer === Player.X ? 'X' : 'O'}</div>
+      </>
+    )}
+  </div>
+);
 
 export default Menu;
